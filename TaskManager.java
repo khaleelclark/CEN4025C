@@ -123,37 +123,11 @@ public class TaskManager {
         System.out.println(taskToUpdate.getTaskInformation());
     }
     public static void viewCompletedTasks() {
-        if (!taskList.isEmpty()) {
-            boolean found = false;
-            for (Task task : taskList) {
-                if (task.isTaskStatus()) { // completed
-                    System.out.println(task.getTaskInformation());
-                    found = true;
-                }
-            }
-            if (!found) {
-                System.out.println("No tasks have been completed. Get started now!");
-            }
-        } else {
-            System.out.println("No tasks have been completed. Add some now!");
-        }
+        taskList.getCompletedTasks();
     }
 
     public static void viewIncompleteTasks() {
-        if (!taskList.isEmpty()) {
-            boolean found = false;
-            for (Task task : taskList) {
-                if (!task.isTaskStatus()) { // incomplete
-                    System.out.println(task.getTaskInformation());
-                    found = true;
-                }
-            }
-            if (!found) {
-                System.out.println("No incomplete tasks remaining! Great job!");
-            }
-        } else {
-            System.out.println("There are no incomplete tasks.");
-        }
+        taskList.getIncompleteTasks();
     }
 
 

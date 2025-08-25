@@ -1,33 +1,50 @@
 import java.util.ArrayList;
 
-public class TaskList  extends ArrayList<Task> {
+public class TaskList extends ArrayList<Task> {
 
     public void getCompletedTasks() {
         TaskList completed = new TaskList();
-        if (this.isEmpty()){
-            System.out.println("No tasks found");
+
+        if (this.isEmpty()) {
+            System.out.println("No tasks have been completed. Get started now!");
             return;
         }
+
         for (Task task : this) {
-            if (!task.isTaskStatus()) {
+            if (task.isTaskStatus()) {
                 completed.add(task);
             }
         }
-        System.out.println(completed);
+
+        if (completed.isEmpty()) {
+            System.out.println("No tasks have been completed. Get started now!");
+        } else {
+            for (Task task : completed) {
+                System.out.println(task.getTaskInformation());
+            }
+        }
     }
+
     public void getIncompleteTasks() {
         TaskList incomplete = new TaskList();
-        if (this.isEmpty()){
-            System.out.println("No tasks found");
+
+        if (this.isEmpty()) {
+            System.out.println("There are no incomplete tasks.");
             return;
         }
+
         for (Task task : this) {
-            if (task.isTaskStatus()) {
+            if (!task.isTaskStatus()) {
                 incomplete.add(task);
             }
         }
-        System.out.println(incomplete);
+
+        if (incomplete.isEmpty()) {
+            System.out.println("No incomplete tasks remaining! Great job!");
+        } else {
+            for (Task task : incomplete) {
+                System.out.println(task.getTaskInformation());
+            }
+        }
     }
-
 }
-
