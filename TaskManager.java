@@ -12,8 +12,8 @@ public class TaskManager {
              System.out.println("3. Display all Tasks");
              System.out.println("4. Update a task");
              System.out.println("5. View all completed tasks");
-             System.out.println("5. View all incomplete tasks");
-             System.out.println("6. Exit the Task Management System");
+             System.out.println("6. View all incomplete tasks");
+             System.out.println("7. Exit the Task Management System");
 
              switch (scanner.nextLine()) {
                  case "1": addTask();
@@ -24,7 +24,8 @@ public class TaskManager {
                  break;
                  case "4":
                  case "5":
-                 case "6": {
+                 case "6":
+                 case "7": {
                      System.out.println("Thank you for using Zindel's Task Management System");
                      System.exit(0);
                      break;
@@ -56,8 +57,8 @@ public class TaskManager {
 
             if (taskIndexToRemove == 99) {
                 System.out.println("Canceling...");
-            } else if (taskIndexToRemove >= 0 && taskIndexToRemove < taskList.size()) {
-                Task removedTask = taskList.remove(taskIndexToRemove);
+            } else if (taskIndexToRemove > 0 && taskIndexToRemove <= taskList.size()) {
+                Task removedTask = taskList.remove(taskIndexToRemove - 1);
                 System.out.println(removedTask.getTaskName() + " has been removed.");
             } else {
                 System.err.println("Error: invalid entry. No tasks were removed.\n");
@@ -66,6 +67,7 @@ public class TaskManager {
             System.out.println("No tasks to remove.");
         }
     }
+
 
 
     public static void displayTasks() {
