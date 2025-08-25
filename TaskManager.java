@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class TaskManager {
@@ -10,7 +11,7 @@ public class TaskManager {
              System.out.println("1. Add a new task");
              System.out.println("2. Remove a task");
              System.out.println("3. Display all Tasks");
-             System.out.println("4. Update a task");
+             System.out.println("4. Complete a task");
              System.out.println("5. View all completed tasks");
              System.out.println("6. View all incomplete tasks");
              System.out.println("7. Exit the Task Management System");
@@ -20,9 +21,10 @@ public class TaskManager {
                  break;
                  case "2": removeTask();
                  break;
-                 case "3": displayTasks();
+                 case "3": displayAllTasks();
                  break;
-                 case "4":
+                 case "4": updateTask();
+                 break;
                  case "5":
                  case "6":
                  case "7": {
@@ -41,55 +43,92 @@ public class TaskManager {
         String taskName;
             System.out.println("\nPlease enter the name of the task you wish to add or enter 'c' to cancel");
             taskName = scanner.nextLine();
+            String id = generateTaskId();
+
             if (!taskName.equalsIgnoreCase("c")) {
-                Task t = new Task(taskName, false);
+                Task t = new Task(taskName, false, id);
                 taskList.add(t);
+                System.out.println("Task: " + t.getTaskName() + " added successfully.");
+            } else {
+                System.out.println("Add task operation cancelled.");
             }
     }
 
     public static void removeTask() {
-        if (!taskList.isEmpty()) {
-            displayTasks();
-            System.out.println("\nPlease enter the number of the task you wish to remove or enter '99' to cancel");
+        System.out.println("\nPlease enter the ID of the task you wish to remove");
+        displayAllTasks();
+        String idToRemove = scanner.nextLine();
+        Task taskToRemove = getTaskByID(idToRemove);
 
-            int taskIndexToRemove = scanner.nextInt();
-            scanner.nextLine();
+        if (taskToRemove == null) {
+            System.out.println("No task found with ID: " + idToRemove);
+            return;
+        }
 
-            if (taskIndexToRemove == 99) {
-                System.out.println("Canceling...");
-            } else if (taskIndexToRemove > 0 && taskIndexToRemove <= taskList.size()) {
-                Task removedTask = taskList.remove(taskIndexToRemove - 1);
-                System.out.println(removedTask.getTaskName() + " has been removed.");
+        while (true) {
+            System.out.println("Are you sure you'd like to remove this task?");
+            System.out.println(taskToRemove.getTaskName());
+            System.out.print("Enter 'y' to confirm, or 'c' to cancel: \n");
+
+            String confirmation = scanner.nextLine().trim().toLowerCase();
+            if (confirmation.equals("y")) {
+                taskList.remove(taskToRemove);
+                System.out.println("Task: " + taskToRemove.getTaskName() + " removed successfully.");
+                break;
+            } else if (confirmation.equals("c")) {
+                System.out.println("Task removal canceled.");
+                break;
             } else {
-                System.err.println("Error: invalid entry. No tasks were removed.\n");
+                System.err.println("Error: invalid entry. Please enter 'y' or 'c'.");
             }
-        } else {
-            System.out.println("No tasks to remove.");
         }
     }
 
-
-
-    public static void displayTasks() {
-         if (taskList.isEmpty()) {
-             System.out.println("\nThere are no tasks in this list. Add some now!");
-         } else {
-             int i = 1;
-             for (Task task : taskList) {
-                 System.out.println(i + ". " + task.getTaskName() + " " + task.taskStatus());
-                 i++;
-             }
-
-         }
+    public static void displayAllTasks() {
+        if (!taskList.isEmpty()) {
+            System.out.println("Tasks: ");
+            for (Task task : taskList) {
+                System.out.println(task.getTaskInformation());
+            }
+        } else {
+            System.out.println("No tasks to display.");
+        }
     }
 
-    public static void updateTask() {
-         //TODO
+    public static void updateTask(){
+         System.out.println("\nPlease enter the ID of the task you wish to complete");
+         displayAllTasks();
+         String idToUpdate = scanner.nextLine();
+         Task taskToUpdate = getTaskByID(idToUpdate);
+
+         if (taskToUpdate == null) {
+             System.out.println("No task found with ID: " + idToUpdate);
+             return;
+         }
+         taskToUpdate.setTaskStatus(true);
+        System.out.println("Task " + taskToUpdate.getTaskName() + " completed successfully.");
+        System.out.println(taskToUpdate.getTaskInformation());
     }
     public static void viewCompletedTasks() {
          //TODO
     }
     public static void viewIncompleteTasks() {
          //TODO
+    }
+
+    public static Task getTaskByID(String id) {
+         for (Task task : taskList) {
+             if (task.getTaskId().equals(id)) {
+                 return task;
+             }
+         }
+         return null;
+    }
+
+    public static String generateTaskId() {
+         Random random = new Random();
+         String uniqueId = String.valueOf(1 + random.nextInt(100));
+         if (getTaskByID(uniqueId) == null) return uniqueId;
+         else return generateTaskId();
     }
 }
