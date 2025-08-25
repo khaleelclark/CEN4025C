@@ -21,4 +21,12 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
+    public String taskStatus () {
+        if (taskStatus) {
+            return "Completed ✓";
+        } else {
+            return "Incomplete ✗";
+        }
+    }
+
 }
