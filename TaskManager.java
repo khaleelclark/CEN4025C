@@ -25,8 +25,10 @@ public class TaskManager {
                  break;
                  case "4": updateTask();
                  break;
-                 case "5":
-                 case "6":
+                 case "5": viewCompletedTasks();
+                 break;
+                 case "6": viewIncompleteTasks();
+                 break;
                  case "7": {
                      System.out.println("Thank you for using Zindel's Task Management System");
                      System.exit(0);
@@ -55,8 +57,14 @@ public class TaskManager {
     }
 
     public static void removeTask() {
+         if (taskList.isEmpty()) {
+             System.out.println("There are no tasks to remove.");
+             return;
+         }
+
         System.out.println("\nPlease enter the ID of the task you wish to remove");
         displayAllTasks();
+
         String idToRemove = scanner.nextLine();
         Task taskToRemove = getTaskByID(idToRemove);
 
@@ -91,11 +99,16 @@ public class TaskManager {
                 System.out.println(task.getTaskInformation());
             }
         } else {
-            System.out.println("No tasks to display.");
+            System.out.println("No tasks to display. Add some now!");
         }
     }
 
     public static void updateTask(){
+        if (taskList.isEmpty()) {
+            System.out.println("There are no tasks to complete. Add some now!");
+            return;
+        }
+
          System.out.println("\nPlease enter the ID of the task you wish to complete");
          displayAllTasks();
          String idToUpdate = scanner.nextLine();
@@ -110,11 +123,39 @@ public class TaskManager {
         System.out.println(taskToUpdate.getTaskInformation());
     }
     public static void viewCompletedTasks() {
-         //TODO
+        if (!taskList.isEmpty()) {
+            boolean found = false;
+            for (Task task : taskList) {
+                if (task.isTaskStatus()) { // completed
+                    System.out.println(task.getTaskInformation());
+                    found = true;
+                }
+            }
+            if (!found) {
+                System.out.println("No tasks have been completed. Get started now!");
+            }
+        } else {
+            System.out.println("No tasks have been completed. Add some now!");
+        }
     }
+
     public static void viewIncompleteTasks() {
-         //TODO
+        if (!taskList.isEmpty()) {
+            boolean found = false;
+            for (Task task : taskList) {
+                if (!task.isTaskStatus()) { // incomplete
+                    System.out.println(task.getTaskInformation());
+                    found = true;
+                }
+            }
+            if (!found) {
+                System.out.println("No incomplete tasks remaining! Great job!");
+            }
+        } else {
+            System.out.println("There are no incomplete tasks.");
+        }
     }
+
 
     public static Task getTaskByID(String id) {
          for (Task task : taskList) {
